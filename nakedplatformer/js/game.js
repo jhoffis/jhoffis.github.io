@@ -120,7 +120,7 @@ let music = null;
 let musicPlaying = false;
 
 let LVLImg = new MarvinImage();
-let LVL = 1;
+let LVL = 0;
 const maxLVL = 2;
 
 function loadLVL() {
@@ -317,8 +317,8 @@ function finishLevel() {
 
         window.setTimeout(() => {
             running = false;
-            finishTextMesh = null;
             loadLVL();
+            finishTextMesh = null;
         }, 3000);
 
         return true;
