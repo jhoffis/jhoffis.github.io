@@ -192,7 +192,7 @@ class Character {
             newWalkingSpeed += this.walkingAcceleration * newWalkingCount;
         }
 
-        let finalWalkingSpeed = forwBackValue * (newWalkingSpeed * (running ? 2 : 1));
+        let finalWalkingSpeed = forwBackValue * (newWalkingSpeed * (running ? 3 : 2));
 
         let newPosition = new THREE.Vector2(this.position.x + finalWalkingSpeed, this.position.y);
         if (!this.isWithinColliderX(colliders, newPosition, this.size)) {
