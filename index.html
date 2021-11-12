@@ -1,15 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>jhoffis' amazing site</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-<body>
-    <h2>Welcome to jhoffis' amazing site!</h2>
-    <p>Here are some games:</p><br/>
-    <a href="https://store.steampowered.com/app/1261300/Racingmaybe/">Racingmaybe</a><br/>
-    <a href="nakedplatformer">Naked Platformer</a><br/>
-    <a href="traderman">Traderman</a><br/>
-    <a href="https://jhoffislauda.itch.io/a-platformer-engine">A Platformer Engine</a><br/>
+
+<body class="container">
+    <h2 class="item-a">Welcome to jhoffis' amazing site!</h2>
+
+    <p>Here are some games:</p>
+    <a href="https://store.steampowered.com/app/1261300/Racingmaybe/">Racingmaybe</a>
+    <a href="nakedplatformer">Naked Platformer</a>
+    <a href="traderman">Traderman</a>
+    <a href="https://jhoffislauda.itch.io/a-platformer-engine">A Platformer Engine</a>
+
+    <img src="nakedplatformer/res/char/fall0.png">
+
+
+    <script>
+        function padZero(str, len) {
+            len = len || 2;
+            var zeros = new Array(len).join('0');
+            return (zeros + str).slice(-len);
+        }
+
+        /*
+            This has a bw option that will decide whether to invert to black or white; so you'll get more contrast which is generally better for the human eye.
+        */
+        function invertColor(hex, bw) {
+            if (hex.indexOf('#') === 0) {
+                hex = hex.slice(1);
+            }
+            // convert 3-digit hex to 6-digits.
+            if (hex.length === 3) {
+                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+            }
+            if (hex.length !== 6) {
+                throw new Error('Invalid HEX color.');
+            }
+            var r = parseInt(hex.slice(0, 2), 16),
+                g = parseInt(hex.slice(2, 4), 16),
+                b = parseInt(hex.slice(4, 6), 16);
+            if (bw) {
+                // https://stackoverflow.com/a/3943023/112731
+                return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ?
+                    '#000000' :
+                    '#FFFFFF';
+            }
+            // invert color components
+            r = (255 - r).toString(16);
+            g = (255 - g).toString(16);
+            b = (255 - b).toString(16);
+            // pad each with zeros and return
+            return "#" + padZero(r) + padZero(g) + padZero(b);
+        }
+
+        let timeRecord = undefined;
+        let fromTime = undefined;
+        let amount = 0;
+
+        const links = document.getElementsByTagName("a");
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener("mouseover", () => {
+                if (links[i].style.backgroundColor === "black")
+                    return;
+                amount++;
+                if (fromTime === undefined) {
+                    fromTime = Date.now()
+                } else {
+                    console.log(amount + " and " + links.length)
+                    if (amount >= links.length) {
+                        time = Date.now() - fromTime;
+                        // time = time.getSeconds();
+                        if (timeRecord === undefined || timeRecord > time) {
+                            timeRecord = time;
+                        }
+                        fromTime = undefined;
+                        amount = 0;
+                        document.getElementsByClassName("item-a")[0].innerHTML = "Your best time was " + timeRecord;
+                    }
+                }
+                links[i].style.backgroundColor = "black";
+                links[i].style.color = "white";
+            });
+        }
+
+        setInterval(() => {
+            fromTime = undefined;
+            amount = 0;
+            for (let i = 0; i < links.length; i++) {
+                let color = "#" + (Math.floor(Math.random() * 16777215).toString(16));
+                while (color.length < 7)
+                    color += 0;
+                links[i].style.backgroundColor = color;
+                links[i].style.color = invertColor(color, true);
+            }
+        }, 1000);
+    </script>
+
 </body>
+
 </html>
