@@ -9,10 +9,12 @@ const links = [
 	{ title: "Their Disagreement - Boardgame", image: "uenighet.jpg", path: "deresuenighet" },
 ];
 let images = [];
+let listedLinks = [];
 let globalIndex = -1;
-let lastImg = { x: 0, y: 0, image: undefined };
+let lastImg = { x: 0, y: 0, image: undefined, link: undefined };
 const maxAmountImgs = 5;
-const title = document.getElementById("title");
+const titleNode = document.getElementById("title");
+const listLinksNode = document.getElementById("info2");
 
 const activate = (image, x, y) => {
 	image.style.left = x + "px";
@@ -25,10 +27,15 @@ const activate = (image, x, y) => {
 	}
 
 	image.dataset.status = "current";
-	
 	if (lastImg.image !== undefined)
 		lastImg.image.dataset.status = "active";
-	lastImg = { x, y, image };
+	
+	const link = listedLinks[globalIndex];
+	link.style.fontWeight = "bolder";
+	if (lastImg.link !== undefined) {
+		lastImg.link.style.fontWeight = "normal";
+	}
+	lastImg = { x, y, image, link };
 }
 
 const distanceFromLastPos = (x, y) => {
@@ -38,7 +45,7 @@ const distanceFromLastPos = (x, y) => {
 window.onmousemove = e => {
 	if (distanceFromLastPos(e.clientX, e.clientY) > 128) {
 		globalIndex = (globalIndex + 1) % images.length;
-		title.innerText = links[globalIndex].title;
+		titleNode.innerText = links[globalIndex].title;
 		
 		const lead = images[globalIndex];
 		activate(lead, e.clientX, e.clientY);
@@ -59,11 +66,17 @@ window.onmousedown = e => {
 }
 
 for (let i = 0; i < links.length; i++) {
-	let img = new Image();
-	img = document.body.appendChild(img);
+	const img = new Image();
 	img.dataset.index = i;
 	img.dataset.status = "inactive";
 	img.src = "./imgs/" + links[i].image;
 	img.className = "img";
+	document.body.appendChild(img);
 	images.push(img);
+
+	const link = document.createElement("a");
+	link.innerText = links[i].title;
+	link.href = links[i].path;
+	listLinksNode.appendChild(link);
+	listedLinks.push(link);
 }
