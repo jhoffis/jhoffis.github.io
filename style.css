@@ -28,8 +28,7 @@ body {
 }
 
 .img {
-    width: 72vmin;
-	position: absolute;
+    position: absolute;
 	transform: translate(-50%, -50%);
     /* border-radius: 50%; */
 }
@@ -39,10 +38,13 @@ body {
 }
 
 .img[data-status="active"] {
+    width: 72vmin;
     display: block;
+    opacity: 0.8;
 }
 
 .img[data-status="current"] {
+    width: 80vmin;
     display: block;
     border-style: solid;
     border-width: 8px;

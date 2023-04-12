@@ -35,7 +35,7 @@ const distanceFromLastPos = (x, y) => {
 }
 
 window.onmousemove = e => {
-	if (distanceFromLastPos(e.clientX, e.clientY) > 100) {
+	if (distanceFromLastPos(e.clientX, e.clientY) > 128) {
 		globalIndex = (globalIndex + 1) % images.length;
 		title.innerText = links[globalIndex].title;
 		
