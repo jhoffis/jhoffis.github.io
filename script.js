@@ -7,6 +7,7 @@ const links = [
 	{ title: "A Platformer Engine", image: "platformer.png", path: "https://jhoffislauda.itch.io/a-platformer-engine" },
 	{ title: "Very fast grid path finder", image: "fastpath.png", path: "https://github.com/jhoffis/pathfinding" },
 	{ title: "Their Disagreement - Boardgame", image: "uenighet.jpg", path: "deresuenighet" },
+	{ title: "XboxEngine Project", image: "xproj.jpg", path: "xproj" },
 ];
 let images = [];
 let listedLinks = [];

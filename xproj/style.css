@@ -1,0 +1,18 @@
+body {
+    margin: 0 8rem;
+    background-color: #DCD4D0;
+}
+
+p {
+    color: #2A2C24;
+}
+
+h2 {
+    text-align: center;
+}
+
+img {
+    width: 75%;
+    margin: 1rem auto;
+    display: block;
+}
