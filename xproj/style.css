@@ -4,6 +4,12 @@ body {
     color: #E2F1D0;
 }
 
+hr{
+    height: 1px;
+    background-color: #E2F1D0;
+    border: none;
+}
+
 h2 {
     text-align: center;
 }
