@@ -30,7 +30,7 @@ a {
     padding: 1rem;
 }
 
-.content img {
+.content .big-img {
     height: 60%;
     width: 60%;
     object-fit: contain;
@@ -53,3 +53,9 @@ a {
     margin-bottom: 0;
     font-size: small;
 }
+
+.small-right-img {
+    max-width: 15%;
+    float: right;
+}
+
