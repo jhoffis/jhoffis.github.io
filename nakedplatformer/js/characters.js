@@ -1,6 +1,6 @@
 "use strict";
 
-let deltaTime = 16;
+let animationTime = 16;
 
 class SpriteAnimator {
     //En array med objekter som inneholder url og antall og type.
@@ -42,7 +42,7 @@ class SpriteAnimator {
 
         //End old animation
 
-        deltaTime = fps;
+        animationTime = fps;
 
         //Set up
         this.currentAnimation = index;
@@ -55,7 +55,7 @@ class SpriteAnimator {
             this.currentTextureMap = this.animations[this.currentAnimation][this.currentFrame];
             this.material.map = this.currentTextureMap;
             this.currentFrame = (this.currentFrame + 1) % this.animations[this.currentAnimation].length;
-            setTimeout(this.animationInterval, 1000 / deltaTime);
+            setTimeout(this.animationInterval, 1000 / animationTime);
         }
         this.animationInterval();
     }
@@ -69,7 +69,7 @@ class SpriteAnimator {
         if (this.currentAnimation === index)
             return;
 
-        deltaTime = fps;
+        animationTime = fps;
 
         this.currentAnimation = index;
         this.currentFrame = 0;

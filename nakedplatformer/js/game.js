@@ -118,12 +118,14 @@ let running = false;
 let finishTextMesh = null;
 let music = null;
 let musicPlaying = false;
+let finished = false;
 
 let LVLImg = new MarvinImage();
 let LVL = 0;
 const maxLVL = 2;
 
 function loadLVL() {
+    finished = false;
     LVLImg.load("res/maps/map" + LVL + ".png", initLVL);
 }
 
@@ -286,7 +288,9 @@ function checkFalling(item) {
 }
 
 function finishLevel() {
+    if (finished) return false;
     if (finishTextMesh === null) {
+        finished = true;
         new Sound("res/sounds/ldjamwin.mp3").play();
 
         let loader = new THREE.FontLoader();
