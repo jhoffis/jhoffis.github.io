@@ -13,24 +13,25 @@ let images = [];
 let listedLinks = [];
 let globalIndex = -1;
 let lastImg = { x: 0, y: 0, image: undefined, link: undefined };
-const maxAmountImgs = 5;
+const maxAmountImgs = 8;
 const titleNode = document.getElementById("title");
 const listLinksNode = document.getElementById("info2");
 
 const activate = (image, x, y) => {
-	// head of the snake
-	image.style.left = x + "px";
-	image.style.top = y + "px";
-	image.style.zIndex++;
-	if (image.style.zIndex > images.length) {
-		images.forEach(element => {
-			element.style.zIndex -= images.length;
-		});
-	}
-
+	// update the head of the snake and make the previous head part of the tail	
 	image.dataset.status = "current";
 	if (lastImg.image !== undefined)
 		lastImg.image.dataset.status = "active";
+
+	// head of the snake
+	image.style.left = x + "px";
+	image.style.top = y + "px";
+	images.forEach(element => {
+		const z = element.style.zIndex - 1;
+		element.style.zIndex = z;
+	});
+	image.style.zIndex = maxAmountImgs;
+
 	
 	// link the website that the head of the snake is pointing to	
 	const link = listedLinks[globalIndex];
