@@ -39,7 +39,6 @@ body {
 .img[data-status="active"] {
     width: 72vmin;
     display: block;
-    opacity: 0.8;
 }
 
 .img[data-status="current"] {

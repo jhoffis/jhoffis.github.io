@@ -13,7 +13,7 @@ let images = [];
 let listedLinks = [];
 let globalIndex = -1;
 let lastImg = { x: 0, y: 0, image: undefined, link: undefined };
-const maxAmountImgs = 8;
+const maxAmountImgs = 32;
 const listLinksNode = document.getElementById("info");
 // Add floating title element
 const floatingTitle = document.createElement("div");
@@ -28,8 +28,18 @@ function setFloatingTitlePos(img, x, y) {
 const activate = (image, x, y) => {
 	// update the head of the snake and make the previous head part of the tail	
 	image.dataset.status = "current";
-	if (lastImg.image !== undefined)
+	if (lastImg.image !== undefined) {
 		lastImg.image.dataset.status = "active";
+        lastImg.image.style.opacity = 0.8;
+        images.forEach(element => {
+            if (element.dataset.status !== "active") return;
+            const z = element.style.zIndex - 1;
+            element.style.zIndex = z;
+            element.style.opacity -= 0.02;
+        });
+    }
+    image.style.opacity = 1.0;
+    image.style.zIndex = maxAmountImgs;
 
 	// head of the snake
 	image.style.left = x + "px";
@@ -38,12 +48,6 @@ const activate = (image, x, y) => {
 	// Position the floating title above the image
     setFloatingTitlePos(image, x, y);
 	floatingTitle.innerText = links[globalIndex].title;
-	
-	images.forEach(element => {
-		const z = element.style.zIndex - 1;
-		element.style.zIndex = z;
-	});
-	image.style.zIndex = maxAmountImgs;
 	
 	// link the website that the head of the snake is pointing to	
 	const link = listedLinks[globalIndex];
@@ -66,11 +70,10 @@ window.onmousemove = e => {
 
     // Existing mouse movement logic
     const deltaX = e.clientX - lastImg.x;
-    if (images[globalIndex] !== undefined) {
-        const image = images[globalIndex];
-        image.style.left = e.clientX + "px";
-        image.style.top = e.clientY + "px";
-        setFloatingTitlePos(image, e.clientX, e.clientY);
+    if (lastImg.image !== undefined) {
+        lastImg.image.style.left = e.clientX + "px";
+        lastImg.image.style.top = e.clientY + "px";
+        setFloatingTitlePos(lastImg.image, e.clientX, e.clientY);
     }
     
     // Use 5% of window width as threshold instead of fixed 64px
@@ -79,14 +82,20 @@ window.onmousemove = e => {
         const direction = deltaX > 0 ? 1 : -1;
         globalIndex = (globalIndex + direction + links.length) % links.length;
 
-        const lead = images[globalIndex];
-        activate(lead, e.clientX, e.clientY);
+        // Create new image element
+        const newImage = new Image();
+        newImage.dataset.status = "inactive";
+        newImage.src = "./imgs/" + links[globalIndex].image;
+        newImage.className = "img";
+        document.body.appendChild(newImage);
+        images.push(newImage);
 
-        // Update tail cutoff logic
-        const tailIndex = (globalIndex - direction * maxAmountImgs + links.length) % links.length;
-        const tail = images[tailIndex];
-        if (tail) {
-            tail.dataset.status = "inactive";
+        activate(newImage, e.clientX, e.clientY);
+
+        // Remove old images if we exceed maxAmountImgs
+        while (images.length > maxAmountImgs) {
+            const oldImage = images.shift();
+            oldImage.remove();
         }
     }
 }
@@ -99,14 +108,6 @@ window.onmousedown = e => {
 }
 
 for (let i = 0; i < links.length; i++) {
-	const img = new Image();
-	img.dataset.index = i;
-	img.dataset.status = "inactive";
-	img.src = "./imgs/" + links[i].image;
-	img.className = "img";
-	document.body.appendChild(img);
-	images.push(img);
-
 	const link = document.createElement("a");
 	link.innerText = links[i].title;
 	link.href = links[i].path;
