@@ -48,7 +48,10 @@ const distanceFromLastPos = (x, y) => {
 
 window.onmousemove = e => {
 	const deltaX = e.clientX - lastImg.x;
-	
+	if (images[globalIndex] !== undefined) {
+		images[globalIndex].style.left = e.clientX + "px";
+		images[globalIndex].style.top = e.clientY + "px";
+	}
 	if (Math.abs(deltaX) > 64) {  // Reduced threshold for horizontal movement
 		const direction = deltaX > 0 ? 1 : -1;
 		globalIndex = (globalIndex + direction + links.length) % links.length;
