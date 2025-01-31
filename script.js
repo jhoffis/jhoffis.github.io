@@ -14,8 +14,11 @@ let listedLinks = [];
 let globalIndex = -1;
 let lastImg = { x: 0, y: 0, image: undefined, link: undefined };
 const maxAmountImgs = 8;
-const titleNode = document.getElementById("title");
-const listLinksNode = document.getElementById("info2");
+const listLinksNode = document.getElementById("info");
+// Add floating title element
+const floatingTitle = document.createElement("div");
+floatingTitle.id = "floating-title";
+document.body.appendChild(floatingTitle);
 
 const activate = (image, x, y) => {
 	// update the head of the snake and make the previous head part of the tail	
@@ -26,12 +29,17 @@ const activate = (image, x, y) => {
 	// head of the snake
 	image.style.left = x + "px";
 	image.style.top = y + "px";
+	
+	// Position the floating title above the image
+	floatingTitle.style.left = x + "px";
+	floatingTitle.style.top = (y - 40) + "px";
+	floatingTitle.innerText = links[globalIndex].title;
+	
 	images.forEach(element => {
 		const z = element.style.zIndex - 1;
 		element.style.zIndex = z;
 	});
 	image.style.zIndex = maxAmountImgs;
-
 	
 	// link the website that the head of the snake is pointing to	
 	const link = listedLinks[globalIndex];
@@ -49,13 +57,16 @@ const distanceFromLastPos = (x, y) => {
 window.onmousemove = e => {
 	const deltaX = e.clientX - lastImg.x;
 	if (images[globalIndex] !== undefined) {
-		images[globalIndex].style.left = e.clientX + "px";
-		images[globalIndex].style.top = e.clientY + "px";
+		const image = images[globalIndex];
+		image.style.left = e.clientX + "px";
+		image.style.top = e.clientY + "px";
+		// Update floating title position relative to image top edge
+		floatingTitle.style.left = e.clientX + "px";
+		floatingTitle.style.top = (e.clientY - (image.offsetHeight/2) - 48) + "px";
 	}
 	if (Math.abs(deltaX) > 64) {  // Reduced threshold for horizontal movement
 		const direction = deltaX > 0 ? 1 : -1;
 		globalIndex = (globalIndex + direction + links.length) % links.length;
-		titleNode.innerText = links[globalIndex].title;
 
 		const lead = images[globalIndex];
 		activate(lead, e.clientX, e.clientY);
