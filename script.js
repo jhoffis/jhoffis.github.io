@@ -22,7 +22,7 @@ document.body.appendChild(floatingTitle);
 
 function setFloatingTitlePos(img, x, y) {
     floatingTitle.style.left = x + "px";
-    floatingTitle.style.top = (y - (img.offsetHeight/2) - 48) + "px";
+    floatingTitle.style.top = (y - (img.offsetHeight/2) - 0) + "px";
 }
 
 const activate = (image, x, y) => {
