@@ -15,10 +15,19 @@ let globalIndex = -1;
 let lastImg = { x: 0, y: 0, image: undefined, link: undefined };
 const maxAmountImgs = 32;
 const listLinksNode = document.getElementById("info");
+const body = document.body;
 // Add floating title element
 const floatingTitle = document.createElement("div");
 floatingTitle.id = "floating-title";
 document.body.appendChild(floatingTitle);
+
+// Add near the top with other constants
+let infoRect = listLinksNode.getBoundingClientRect();
+
+// Add window resize handler
+window.addEventListener('resize', () => {
+    infoRect = listLinksNode.getBoundingClientRect();
+});
 
 function setFloatingTitlePos(img, x, y) {
     floatingTitle.style.left = x + "px";
@@ -67,6 +76,10 @@ window.onmousemove = e => {
     const x = (e.clientX / window.innerWidth) * 100;
     const y = (e.clientY / window.innerHeight) * 100;
     document.body.style.backgroundPosition = `${x}% ${y}%`;
+
+    // Use cached infoRect
+    const isOverInfoX = e.clientX >= infoRect.left && e.clientX <= infoRect.right;
+    body.style.cursor = isOverInfoX ? 'default' : 'none';
 
     // Existing mouse movement logic
     const deltaX = e.clientX - lastImg.x;
