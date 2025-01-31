@@ -18,6 +18,7 @@ const titleNode = document.getElementById("title");
 const listLinksNode = document.getElementById("info2");
 
 const activate = (image, x, y) => {
+	// head of the snake
 	image.style.left = x + "px";
 	image.style.top = y + "px";
 	image.style.zIndex++;
@@ -31,6 +32,7 @@ const activate = (image, x, y) => {
 	if (lastImg.image !== undefined)
 		lastImg.image.dataset.status = "active";
 	
+	// link the website that the head of the snake is pointing to	
 	const link = listedLinks[globalIndex];
 	link.style.fontWeight = "bolder";
 	if (lastImg.link !== undefined) {
@@ -45,12 +47,14 @@ const distanceFromLastPos = (x, y) => {
 
 window.onmousemove = e => {
 	if (distanceFromLastPos(e.clientX, e.clientY) > 128) {
+		// update the snake
 		globalIndex = (globalIndex + 1) % images.length;
 		titleNode.innerText = links[globalIndex].title;
 		
 		const lead = images[globalIndex];
 		activate(lead, e.clientX, e.clientY);
 
+		// cut off the end of its tail
 		const tail = images[globalIndex >= maxAmountImgs ? 
 			globalIndex - maxAmountImgs :
 			images.length + (globalIndex - maxAmountImgs)];
@@ -63,6 +67,7 @@ window.onmousemove = e => {
 window.onmousedown = e => {
 	if (e.button !== 0)
 		return;
+	// go to the head's link
 	document.location.href = links[globalIndex].path;
 }
 
