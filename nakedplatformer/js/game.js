@@ -130,7 +130,7 @@ function loadLVL() {
 }
 
 function initLVL() {
-    if (LVL < maxLVL) {
+    if (LVL <= maxLVL) {
 
         LVL++;
         if (colliders != null) {
@@ -271,18 +271,29 @@ function animate() {
 }
 
 function checkCollition(item, dt) {
-
-    if (item.isWithinColliderX(colliders, item.position, item.size)) {
-        item.stopWalking();
-        item.standByOnUnder(item.sideCollider);
-    }
-
     //If falling increment falling in class
     if (!checkFalling(item)) {
         item.fall(dt);
         checkFalling(item);
     }
-
+    const death = deathCountCount;
+    if (item.isWithinColliderX(colliders, item.position, item.size)) {
+        // If we hit a spike from the side, we should die - but only if we're within its actual hitbox
+        if (item.sideCollider?.type === 'spike') {
+            // Check if we're within the actual spike hitbox
+            let spikeTop = item.sideCollider.position.y;
+            let spikeBottom = item.sideCollider.position.y - item.sideCollider.size.y/2;
+            let playerBottom = item.position.y - item.size.y/2;
+            let playerTop = item.position.y + item.size.y/2;
+            
+            if (playerBottom < spikeTop && playerTop > spikeBottom) {
+                item.die();
+            }
+        } else if (death === deathCountCount) {
+            //item.stopWalking();
+            item.standByOnUnder(item.sideCollider);
+        }
+    }
 
     item.updateSprite();
 }
@@ -301,6 +312,16 @@ function finishLevel() {
         finished = true;
         new Sound("res/sounds/ldjamwin.mp3").play();
 
+        window.setTimeout(() => {
+            new Sound("res/sounds/ldjamwin.mp3").play();
+        }, 30);
+        window.setTimeout(() => {
+            new Sound("res/sounds/ldjamwin.mp3").play();
+        }, 130);
+        window.setTimeout(() => {
+            new Sound("res/sounds/ldjamwin.mp3").play();
+        }, 430);
+
         let loader = new THREE.FontLoader();
 
         loader.load('res/helvetiker_regular.typeface.json', function (font) {
@@ -314,7 +335,6 @@ function finishLevel() {
                 bevelSize: 3,
                 bevelOffset: 0,
                 bevelSegments: 2
-
             });
 
             let textMaterial = new THREE.MeshPhongMaterial(
@@ -322,15 +342,19 @@ function finishLevel() {
             );
 
             finishTextMesh = new THREE.Mesh(finishText, textMaterial);
-
             scene.add(finishTextMesh);
-
         });
 
         window.setTimeout(() => {
             running = false;
+            // Remove the text mesh from the scene before loading new level
+            if (finishTextMesh) {
+                scene.remove(finishTextMesh);
+                finishTextMesh.geometry.dispose();
+                finishTextMesh.material.dispose();
+                finishTextMesh = null;
+            }
             loadLVL();
-            finishTextMesh = null;
         }, 3000);
 
         return true;

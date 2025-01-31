@@ -119,6 +119,11 @@ class Character {
         if (this.verticalMovement.value > this.verticalMovement.min)
             this.verticalMovement.value -= 0.0005 * this.fallingCount * (dt/16.67);
         this.position.y += this.verticalMovement.value;
+
+        // Add death when falling below y = -5
+        if (this.position.y < -5) {
+            this.die();
+        }
     }
 
     stopFalling() {
@@ -127,12 +132,22 @@ class Character {
     }
 
     standByOnUnder(tile) {
+        // Check for spike collision first
+        if (tile.type === 'spike') {
+            // Only die if we're actually within the spike's hitbox
+            let playerBottom = this.position.y - this.size.y/2;
+            let spikeTop = tile.position.y + tile.size.y/2;
+            
+            if (playerBottom <= spikeTop) {
+                this.die();
+                return;
+            }
+        }
 
         if (tile.interaction !== null) {
             if (tile.interaction())
                 return;
         }
-
 
         if (this.position.y - tile.position.y > 0) {
             //You're above!
@@ -195,6 +210,7 @@ class Character {
         let finalWalkingSpeed = forwBackValue * (newWalkingSpeed * 3);
 
         let newPosition = new THREE.Vector2(this.position.x + finalWalkingSpeed, this.position.y);
+
         if (!this.isWithinColliderX(colliders, newPosition, this.size)) {
             this.walkingSpeed = newWalkingSpeed;
             this.walkingCount = newWalkingCount;
@@ -208,10 +224,10 @@ class Character {
     }
 
     die() {
-        new Sound("res/sounds/ldjamdead.mp3").play();
+        this.position.set(this.spawn.x, this.spawn.y);
         this.stopFalling();
         this.stopWalking();
-        this.position.set(this.spawn.x, this.spawn.y);
+        new Sound("res/sounds/ldjamdead.mp3").play();
         incrementDeathCounter();
         return true;
     }
@@ -236,13 +252,12 @@ class Character {
         }
 
         for (let i = from; i < to; i++) {
-
-            let elem0 = colliders[x1][i];
+            let elem0 = colliders[x1]?.[i];
             if (elem0 != null) {
                 rows.push(elem0);
             }
             if (additionalTiles) {
-                let elem1 = colliders[x2][i];
+                let elem1 = colliders[x2]?.[i];
                 if (elem1 != null) {
                     rows.push(elem1);
                 }
@@ -255,9 +270,24 @@ class Character {
             rows.forEach((tile) => {
                 let y1Tile = tile.position.y + tile.size.y / 2;
                 let y2Tile = tile.position.y - tile.size.y / 2;
+                let x1Tile = tile.position.x - tile.size.x / 2;
+                let x2Tile = tile.position.x + tile.size.x / 2;
 
-                if (y1 > y2Tile && y2 < y1Tile) {
+                let yOverlap;
+                if (tile.type === 'spike') {
+                    yOverlap = y1 > y2Tile && y2 < tile.position.y - tile.size.y / 2;
+                } else {
+                    // Normal collision check for non-spike tiles
+                    yOverlap = y1 > y2Tile && y2 < y1Tile;
+                }
+
+                let xOverlap = position.x + size.x/2 > x1Tile && position.x - size.x/2 < x2Tile;
+
+                if (xOverlap && yOverlap) {
                     result = true;
+                    if (tile.type === 'spike') {
+                        console.log("Collided with spike");
+                    }
                     this.underCollider = tile;
                     return result;
                 }
@@ -278,7 +308,6 @@ class Character {
         let tiles = [];
         let additionalTiles = y1 !== y2;
 
-
         let from = Math.round(x1) - 1;
         let to = Math.round(x2) + 1;
 
@@ -290,7 +319,6 @@ class Character {
         }
 
         for (let i = from; i < to; i++) {
-
             let elem0 = colliders[i][y1];
             if (elem0 != null) {
                 tiles.push(elem0);
@@ -309,11 +337,27 @@ class Character {
             tiles.forEach((tile) => {
                 let x1Tile = tile.position.x - tile.size.x / 2;
                 let x2Tile = tile.position.x + tile.size.x / 2;
+                let y1Tile = tile.position.y + tile.size.y / 2;
+                let y2Tile = tile.position.y - tile.size.y / 2;
 
                 if (x1 < x2Tile && x2 > x1Tile) {
-                    result = true;
-                    this.sideCollider = tile;
-                    return result;
+                    // Check if we're colliding with a spike
+                    if (tile.type === 'spike') {
+                        // Only die if we're within the actual spike hitbox
+                        let playerBottom = position.y - size.y/2;
+                        let playerTop = position.y + size.y/2;
+                        
+                        // Check if we're within the spike's vertical bounds
+                        if (playerBottom < y1Tile && playerTop > y2Tile) {
+                            this.die();
+                            result = true;
+                            return result;
+                        }
+                    } else {
+                        result = true;
+                        this.sideCollider = tile;
+                        return result;
+                    }
                 }
             });
         }
@@ -371,6 +415,7 @@ class Tile {
         this.sprite.scale.set(size.x, size.y);
         this.position = position;
         this.sprite.position.set(position.x, position.y, 0);
+        this.type = url.includes('spike') ? 'spike' : 'normal';
     }
 
 }
