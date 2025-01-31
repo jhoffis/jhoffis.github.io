@@ -1,13 +1,13 @@
 const links = [
-	{ title: "Racingmaybe", image: "rm.jpg", path: "https://store.steampowered.com/app/1261300/Racingmaybe/" },
+	{ title: "Racingmaybe", image: "rm.webp", path: "https://store.steampowered.com/app/1261300/Racingmaybe/" },
+	{ title: "Racingmaybe 2: Gives Off Speed", image: "rm2.webp", path: "https://github.com/jhoffis/cproj_rm2" },
 	{ title: "Racingmaybe 1.8.3_FINAL (Old Alpha)", image: "rmold.png", path: "http://www.mediafire.com/file/4uogtrek3a1wnw3/racingmaybe_final.zip/file" },
-	{ title: "A Long Cruise (Old Racingmaybe pre-alpha)", image: "alongcruise.png", path: "alongcruise" },
 	{ title: "Naked Platformer", image: "nakedplatformer.png", path: "nakedplatformer" },
 	{ title: "Traderman", image: "traderman.png", path: "traderman" },
 	{ title: "A Platformer Engine", image: "platformer.png", path: "https://jhoffislauda.itch.io/a-platformer-engine" },
 	{ title: "Very fast grid path finder", image: "fastpath.png", path: "https://github.com/jhoffis/pathfinding" },
-	{ title: "Their Disagreement - Boardgame", image: "uenighet.jpg", path: "deresuenighet" },
-	{ title: "XboxEngine Project", image: "xproj.jpg", path: "xproj" },
+	{ title: "Their Disagreement - Boardgame", image: "uenighet.webp", path: "deresuenighet" },
+	{ title: "XboxEngine Project", image: "xproj.webp", path: "xproj" },
 ];
 let images = [];
 let listedLinks = [];

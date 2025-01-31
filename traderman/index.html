@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
-	<p>Try to get the highest score within 180 seconds. Iron gives 2 points and gold gives 1 point. Traders walk around and buy from your buildings you place wood into. When the wood capacity reaches zero it is destroyed. Gather the stored gold before that! Enjoy the spagetti!
-	<br/>
-	Controls:
-	<br/>
-	WASD and Arrows: Move player<br/>
-	E: chop trees, gather wood and mine iron. (You can only chop fully grown trees)<br/>
-	Shift+E: gather gold from building<br/>
-	HJKL or dragging by mouse: move the camera.<br/>
-	Q: Focus camera on player.<br/>
-	<br/>
-	A building costs 10 Timber. </p>
+    <p>Try to get the highest score within 180 seconds. Iron gives 2 points and gold gives 1 point. Traders walk around and buy from your buildings you place wood into. When the wood capacity reaches zero it is destroyed. Gather the stored gold before that! Enjoy the spagetti!
+    <br/>
+    Controls:
+    <br/>
+    WASD and Arrows: Move player<br/>
+    E: chop trees, gather wood and mine iron. (You can only chop fully grown trees)<br/>
+    Shift+E: gather gold from building<br/>
+    HJKL or dragging by mouse: move the camera.<br/>
+    Q: Focus camera on player.<br/>
+    <br/>
+    A building costs 10 Timber. </p>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas"></canvas>
       <div id="unity-loading-bar">
@@ -56,8 +56,8 @@
         container.className = "unity-mobile";
         config.devicePixelRatio = 1;
       } else {
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        canvas.style.width = "1280px";
+        canvas.style.height = "720px";
       }
       loadingBar.style.display = "block";
 
@@ -71,7 +71,6 @@
           fullscreenButton.onclick = () => {
             unityInstance.SetFullscreen(1);
           };
-	  unityInstance.SetFullscreen(1);
         }).catch((message) => {
           alert(message);
         });
