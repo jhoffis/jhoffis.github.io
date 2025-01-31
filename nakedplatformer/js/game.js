@@ -209,12 +209,20 @@ loadLVL()
 
 // UPDATES
 
+let lastTime = Date.now();
+let deltaTime = 16.67; // Initial value for 60Hz
+
 function animate() {
     if (running) {
+        // Calculate delta time at start of frame
+        const now = Date.now();
+        deltaTime = now - lastTime;
+        lastTime = now;
+
         if (keys.W.pressed) {
             if (canJump || player.fallingCount === 0) {
                 canJump = true;
-                player.jump();
+                player.jump(deltaTime);
             }
         } else if (keys.W.released) {
             canJump = false;
@@ -222,14 +230,14 @@ function animate() {
         }
 
         if (keys.A.pressed) {
-            player.walk(keys.SHIFT.pressed, -1);
+            player.walk(keys.SHIFT.pressed, -1, deltaTime);
         } else if (keys.A.released) {
             player.stopWalking();
             keys.A.released = false;
         }
 
         if (keys.D.pressed) {
-            player.walk(keys.SHIFT.pressed, 1);
+            player.walk(keys.SHIFT.pressed, 1, deltaTime);
             if (!musicPlaying) {
                 music.loop();
                 musicPlaying = true;
@@ -246,7 +254,7 @@ function animate() {
         //Perhaps only check colliders that have key within x position of char in case of
         // checking y and visa versa for checking x colliders.
 
-        characters.forEach(checkCollition);
+        characters.forEach(item => checkCollition(item, deltaTime));
 
         camera.translateX((player.position.x - camera.position.x) / 5);
         camera.translateY((player.position.y - camera.position.y) / 5);
@@ -262,7 +270,7 @@ function animate() {
     }
 }
 
-function checkCollition(item) {
+function checkCollition(item, dt) {
 
     if (item.isWithinColliderX(colliders, item.position, item.size)) {
         item.stopWalking();
@@ -271,7 +279,7 @@ function checkCollition(item) {
 
     //If falling increment falling in class
     if (!checkFalling(item)) {
-        item.fall();
+        item.fall(dt);
         checkFalling(item);
     }
 

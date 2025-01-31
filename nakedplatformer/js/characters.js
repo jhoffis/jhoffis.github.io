@@ -87,7 +87,7 @@ class Character {
         this.animation = animation;
 
 
-        this.verticalMovement = {value: 0, max: 0.1, min: -0.15};
+        this.verticalMovement = {value: 0, max: 1.3, min: -0.15};
         this.fallingCount = 0;
         this.fallingMax = 20;
 
@@ -97,9 +97,9 @@ class Character {
         this.walkingAcceleration = 0.005;
     }
 
-    jump() {
+    jump(dt) {
         if (this.fallingCount < this.fallingMax && this.verticalMovement.value < this.verticalMovement.max)
-            this.verticalMovement.value += 0.04 / (this.fallingCount + 1);
+            this.verticalMovement.value += 0.06 / (this.fallingCount + 1) * (dt/16.67);
         this.position.y += this.verticalMovement.value;
 
         if(this.fallingCount === 0){
@@ -111,13 +111,13 @@ class Character {
         this.fallingCount = this.fallingMax;
     }
 
-    fall() {
+    fall(dt) {
         if (this.fallingCount < this.fallingMax) {
             this.fallingCount++;
         }
 
         if (this.verticalMovement.value > this.verticalMovement.min)
-            this.verticalMovement.value -= 0.0005 * this.fallingCount;
+            this.verticalMovement.value -= 0.0005 * this.fallingCount * (dt/16.67);
         this.position.y += this.verticalMovement.value;
     }
 
@@ -183,16 +183,16 @@ class Character {
         }
     }
 
-    walk(running, forwBackValue) {
+    walk(running, forwBackValue, dt) {
         let newWalkingSpeed = this.walkingSpeed;
         let newWalkingCount = this.walkingCount;
 
         if (newWalkingCount < this.walkingMax) {
             newWalkingCount++;
-            newWalkingSpeed += this.walkingAcceleration * newWalkingCount;
+            newWalkingSpeed += this.walkingAcceleration * newWalkingCount * (dt/16.67);
         }
 
-        let finalWalkingSpeed = forwBackValue * (newWalkingSpeed * (running ? 3 : 2));
+        let finalWalkingSpeed = forwBackValue * (newWalkingSpeed * 3);
 
         let newPosition = new THREE.Vector2(this.position.x + finalWalkingSpeed, this.position.y);
         if (!this.isWithinColliderX(colliders, newPosition, this.size)) {
