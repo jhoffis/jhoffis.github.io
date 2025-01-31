@@ -20,6 +20,11 @@ const floatingTitle = document.createElement("div");
 floatingTitle.id = "floating-title";
 document.body.appendChild(floatingTitle);
 
+function setFloatingTitlePos(img, x, y) {
+    floatingTitle.style.left = x + "px";
+    floatingTitle.style.top = (y - (img.offsetHeight/2) - 48) + "px";
+}
+
 const activate = (image, x, y) => {
 	// update the head of the snake and make the previous head part of the tail	
 	image.dataset.status = "current";
@@ -31,8 +36,7 @@ const activate = (image, x, y) => {
 	image.style.top = y + "px";
 	
 	// Position the floating title above the image
-	floatingTitle.style.left = x + "px";
-	floatingTitle.style.top = (y - 40) + "px";
+    setFloatingTitlePos(image, x, y);
 	floatingTitle.innerText = links[globalIndex].title;
 	
 	images.forEach(element => {
@@ -61,8 +65,7 @@ window.onmousemove = e => {
 		image.style.left = e.clientX + "px";
 		image.style.top = e.clientY + "px";
 		// Update floating title position relative to image top edge
-		floatingTitle.style.left = e.clientX + "px";
-		floatingTitle.style.top = (e.clientY - (image.offsetHeight/2) - 48) + "px";
+        setFloatingTitlePos(image, e.clientX, e.clientY);
 	}
 	if (Math.abs(deltaX) > 64) {  // Reduced threshold for horizontal movement
 		const direction = deltaX > 0 ? 1 : -1;
