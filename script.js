@@ -59,28 +59,36 @@ const distanceFromLastPos = (x, y) => {
 }
 
 window.onmousemove = e => {
-	const deltaX = e.clientX - lastImg.x;
-	if (images[globalIndex] !== undefined) {
-		const image = images[globalIndex];
-		image.style.left = e.clientX + "px";
-		image.style.top = e.clientY + "px";
-		// Update floating title position relative to image top edge
+    // Calculate gradient position based on mouse coordinates
+    const x = (e.clientX / window.innerWidth) * 100;
+    const y = (e.clientY / window.innerHeight) * 100;
+    document.body.style.backgroundPosition = `${x}% ${y}%`;
+
+    // Existing mouse movement logic
+    const deltaX = e.clientX - lastImg.x;
+    if (images[globalIndex] !== undefined) {
+        const image = images[globalIndex];
+        image.style.left = e.clientX + "px";
+        image.style.top = e.clientY + "px";
         setFloatingTitlePos(image, e.clientX, e.clientY);
-	}
-	if (Math.abs(deltaX) > 64) {  // Reduced threshold for horizontal movement
-		const direction = deltaX > 0 ? 1 : -1;
-		globalIndex = (globalIndex + direction + links.length) % links.length;
+    }
+    
+    // Use 5% of window width as threshold instead of fixed 64px
+    const threshold = window.innerWidth * 0.05;
+    if (Math.abs(deltaX) > threshold) {
+        const direction = deltaX > 0 ? 1 : -1;
+        globalIndex = (globalIndex + direction + links.length) % links.length;
 
-		const lead = images[globalIndex];
-		activate(lead, e.clientX, e.clientY);
+        const lead = images[globalIndex];
+        activate(lead, e.clientX, e.clientY);
 
-		// Update tail cutoff logic
-		const tailIndex = (globalIndex - direction * maxAmountImgs + links.length) % links.length;
-		const tail = images[tailIndex];
-		if (tail) {
-			tail.dataset.status = "inactive";
-		}
-	}
+        // Update tail cutoff logic
+        const tailIndex = (globalIndex - direction * maxAmountImgs + links.length) % links.length;
+        const tail = images[tailIndex];
+        if (tail) {
+            tail.dataset.status = "inactive";
+        }
+    }
 }
 
 window.onmousedown = e => {

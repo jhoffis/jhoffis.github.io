@@ -1,5 +1,6 @@
 body {
     background: linear-gradient(210deg, rgba(17,75,95,1) 10%, rgba(244,91,105,1) 100%);
+    background-size: 400% 400%;
     height: 100vh;
     margin: 0px;
     overflow: hidden;
