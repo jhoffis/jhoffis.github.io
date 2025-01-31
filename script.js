@@ -47,18 +47,19 @@ const distanceFromLastPos = (x, y) => {
 }
 
 window.onmousemove = e => {
-	if (distanceFromLastPos(e.clientX, e.clientY) > 128) {
-		// update the snake
-		globalIndex = (globalIndex + 1) % images.length;
+	const deltaX = e.clientX - lastImg.x;
+	
+	if (Math.abs(deltaX) > 64) {  // Reduced threshold for horizontal movement
+		const direction = deltaX > 0 ? 1 : -1;
+		globalIndex = (globalIndex + direction + links.length) % links.length;
 		titleNode.innerText = links[globalIndex].title;
-		
+
 		const lead = images[globalIndex];
 		activate(lead, e.clientX, e.clientY);
 
-		// cut off the end of its tail
-		const tail = images[globalIndex >= maxAmountImgs ? 
-			globalIndex - maxAmountImgs :
-			images.length + (globalIndex - maxAmountImgs)];
+		// Update tail cutoff logic
+		const tailIndex = (globalIndex - direction * maxAmountImgs + links.length) % links.length;
+		const tail = images[tailIndex];
 		if (tail) {
 			tail.dataset.status = "inactive";
 		}
