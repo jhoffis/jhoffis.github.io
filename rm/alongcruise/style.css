@@ -128,6 +128,7 @@ header p {
 	flex: 1;
 	display: flex;
 	z-index: 1;
+	position: relative;
 }
 
 #container::before {
@@ -138,12 +139,6 @@ header p {
 	transform: translateX(-50%);
 	width: calc(100% + 100px);
 	height: calc(100% + 40px);
-	background: linear-gradient(to bottom, 
-		rgba(255, 0, 0, 0.1) 0%,
-		rgba(0, 0, 0, 0) 20%,
-		rgba(0, 0, 0, 0) 80%,
-		rgba(255, 0, 0, 0.1) 100%
-	);
 	pointer-events: none;
 	z-index: -1;
 }
@@ -165,4 +160,28 @@ header p {
     background-color: #f8f9fa;
     padding: 10px;
     border-radius: 4px;
+}
+
+#fullscreen-btn {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: rgba(0, 0, 0, 0.5);
+	border: 1px solid #333;
+	border-radius: 4px;
+	color: #fff;
+	padding: 8px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	z-index: 2;
+	opacity: 0.5;
+}
+
+#fullscreen-btn:hover {
+	opacity: 1;
+	background: rgba(0, 0, 0, 0.8);
+}
+
+#fullscreen-btn svg {
+	display: block;
 }
