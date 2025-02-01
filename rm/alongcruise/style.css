@@ -74,10 +74,11 @@ header {
 	background-color: rgba(0, 0, 0, 0.7);
 	padding: 20px;
 	display: flex;
-	align-items: center;
+	flex-wrap: wrap;
+	align-items: flex-start;
 	gap: 20px;
 	z-index: 1;
-	width: 1240px; /* 1280px - 40px padding */
+	width: 1240px;
 	margin: 0 auto 20px auto;
 }
 
@@ -86,10 +87,9 @@ header a {
 	text-decoration: none;
 	font-size: 1.2em;
 	transition: color 0.3s;
-	width: 15%;
-	text-align: right;
 	padding-right: 20px;
 	border-right: 1px solid #333;
+    margin: auto;
 }
 
 header a:hover {
@@ -101,7 +101,26 @@ header p {
 	color: #cccccc;
 	line-height: 1.6;
 	text-align: left;
-	width: 75%;
+	width: 85%;
+    padding-right: 1rem;
+}
+
+.controls {
+	width: 100%;
+	padding-top: 16px;
+	border-top: 1px solid #333;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 10px;
+}
+
+.control-key {
+	color: #ffdd44;
+	font-family: monospace;
+	padding: 2px 8px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 4px;
+	margin: 0 5px;
 }
 
 #container {
