@@ -1,15 +1,137 @@
 body {
-	background-color: #eeccdd;
+	background-color: #000000;
 	min-height: 100vh;
 	margin: 0;
 	display: flex;
 	flex-direction: column;
+	color: #ffffff;
+	font-family: Arial, sans-serif;
+	position: relative;
+	overflow: hidden;
+}
+
+@keyframes twinkle {
+	0%, 100% { opacity: 0.3; }
+	50% { opacity: 1; }
+}
+
+@keyframes parallax-1 {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
+}
+
+@keyframes parallax-2 {
+	from { transform: translateX(0); }
+	to { transform: translateX(-30%); }
+}
+
+@keyframes parallax-3 {
+	from { transform: translateX(0); }
+	to { transform: translateX(-10%); }
+}
+
+.stars {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 200%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.stars-1 {
+	background-image: 
+		radial-gradient(1px 1px at 25% 25%, white 100%, transparent),
+		radial-gradient(1px 1px at 50% 50%, white 100%, transparent),
+		radial-gradient(2px 2px at 75% 75%, white 100%, transparent),
+		radial-gradient(2px 2px at 25% 75%, white 100%, transparent),
+		radial-gradient(1px 1px at 75% 25%, white 100%, transparent);
+	background-size: 200px 200px;
+	animation: parallax-1 60s linear infinite, twinkle 3s ease-in-out infinite;
+}
+
+.stars-2 {
+	background-image: 
+		radial-gradient(1px 1px at 10% 10%, white 100%, transparent),
+		radial-gradient(2px 2px at 40% 60%, white 100%, transparent),
+		radial-gradient(1px 1px at 60% 30%, white 100%, transparent),
+		radial-gradient(1.5px 1.5px at 85% 85%, white 100%, transparent);
+	background-size: 300px 300px;
+	animation: parallax-2 90s linear infinite, twinkle 4s ease-in-out infinite;
+}
+
+.stars-3 {
+	background-image: 
+		radial-gradient(1.5px 1.5px at 15% 15%, white 100%, transparent),
+		radial-gradient(1px 1px at 35% 85%, white 100%, transparent),
+		radial-gradient(1px 1px at 65% 40%, white 100%, transparent),
+		radial-gradient(1px 1px at 90% 10%, white 100%, transparent);
+	background-size: 400px 400px;
+	animation: parallax-3 120s linear infinite, twinkle 5s ease-in-out infinite;
+}
+
+header {
+	background-color: rgba(0, 0, 0, 0.7);
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	z-index: 1;
+	width: 1240px; /* 1280px - 40px padding */
+	margin: 0 auto 20px auto;
+}
+
+header a {
+	color: #ff4444;
+	text-decoration: none;
+	font-size: 1.2em;
+	transition: color 0.3s;
+	width: 15%;
+	text-align: right;
+	padding-right: 20px;
+	border-right: 1px solid #333;
+}
+
+header a:hover {
+	color: #ff6666;
+}
+
+header p {
+	margin: 0;
+	color: #cccccc;
+	line-height: 1.6;
+	text-align: left;
+	width: 75%;
 }
 
 #container {
 	margin: auto;
 	flex: 1;
 	display: flex;
+	z-index: 1;
+}
+
+#container::before {
+	content: '';
+	position: absolute;
+	top: -20px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: calc(100% + 100px);
+	height: calc(100% + 40px);
+	background: linear-gradient(to bottom, 
+		rgba(255, 0, 0, 0.1) 0%,
+		rgba(0, 0, 0, 0) 20%,
+		rgba(0, 0, 0, 0) 80%,
+		rgba(255, 0, 0, 0.1) 100%
+	);
+	pointer-events: none;
+	z-index: -1;
+}
+
+#container ruffle-player {
+	border: 2px solid #333333;
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 }
 
 .important-note {
