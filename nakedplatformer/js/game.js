@@ -123,7 +123,7 @@ let musicPlaying = false;
 let finished = false;
 
 let LVLImg = new MarvinImage();
-let LVL = 3;
+let LVL = 0;
 
 function loadLVL() {
     finished = false;
