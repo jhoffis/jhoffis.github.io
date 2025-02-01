@@ -1,0 +1,74 @@
+body {
+    /* margin: 0 8rem; */
+    background-color: #04246f; 
+    color: #F5F5F5; 
+}
+
+
+hr {
+    height: 1px;
+    background-color: #E2F1D0;
+    border: none;
+    clear: both; /* Forces the <hr> to go below floated elements */
+}
+
+
+h2 {
+    text-align: center;
+}
+
+a {
+    color: #64CCCE;
+}
+
+.normal-link {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.content {
+    background-color: #061326; 
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.content .big-img {
+    height: 60%;
+    width: 60%;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    /* padding-top: 0; */
+    /* padding-right: 1rem; */
+    /* padding-bottom: 1rem; */
+    /* padding-left: 1rem;  */
+}
+
+.content .bigger-img {
+    height: 95%;
+    width: 95%;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.img-title {
+    height: 60%;
+    width: 60%;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    font-size: small;
+}
+
+.small-right-img {
+    max-width: 25%;
+    padding: 16px;
+    float: right;
+}
+
