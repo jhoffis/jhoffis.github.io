@@ -77,20 +77,28 @@ window.onmousemove = e => {
     const y = (e.clientY / window.innerHeight) * 100;
     document.body.style.backgroundPosition = `${x}% ${y}%`;
 
-    // Use cached infoRect
-    const isOverInfoX = e.clientX >= infoRect.left && e.clientX <= infoRect.right;
-    body.style.cursor = isOverInfoX ? 'default' : 'none';
+    // Get current bounds of info div
+    infoRect = listLinksNode.getBoundingClientRect();
+    const isOverInfo = e.clientX >= infoRect.left && 
+                      e.clientX <= infoRect.right && 
+                      e.clientY >= infoRect.top && 
+                      e.clientY <= infoRect.bottom;
+    body.style.cursor = isOverInfo ? 'default' : 'none';
 
-    // Existing mouse movement logic
-    const deltaX = e.clientX - lastImg.x;
+    // Always update the position of the current image
     if (lastImg.image !== undefined) {
         lastImg.image.style.left = e.clientX + "px";
         lastImg.image.style.top = e.clientY + "px";
         setFloatingTitlePos(lastImg.image, e.clientX, e.clientY);
     }
     
-    // Use 5% of window width as threshold instead of fixed 64px
+    // Skip the rest of the logic if we're over the info div
+    if (isOverInfo) return;
+    
+    // Only process x-diff when not over info div
+    const deltaX = e.clientX - lastImg.x;
     const threshold = window.innerWidth * 0.05;
+    
     if (Math.abs(deltaX) > threshold) {
         const direction = deltaX > 0 ? 1 : -1;
         globalIndex = (globalIndex + direction + links.length) % links.length;
@@ -120,10 +128,36 @@ window.onmousedown = e => {
 	document.location.href = links[globalIndex].path;
 }
 
+// Add this new function to handle link hover
+function handleLinkHover(index) {
+    if (globalIndex === index) return; // Don't do anything if it's already the current image
+    
+    globalIndex = index;
+    
+    // Create new image element
+    const newImage = new Image();
+    newImage.dataset.status = "inactive";
+    newImage.src = "./imgs/" + links[globalIndex].image;
+    newImage.className = "img";
+    document.body.appendChild(newImage);
+    images.push(newImage);
+
+    // Use the last known mouse position for the new image
+    activate(newImage, lastImg.x || window.innerWidth/2, lastImg.y || window.innerHeight/2);
+
+    // Remove old images if we exceed maxAmountImgs
+    while (images.length > maxAmountImgs) {
+        const oldImage = images.shift();
+        oldImage.remove();
+    }
+}
+
 for (let i = 0; i < links.length; i++) {
 	const link = document.createElement("a");
 	link.innerText = links[i].title;
 	link.href = links[i].path;
+	// Add hover event listeners
+	link.addEventListener('mouseenter', () => handleLinkHover(i));
 	listLinksNode.appendChild(link);
 	listedLinks.push(link);
 }
