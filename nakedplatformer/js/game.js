@@ -12,6 +12,8 @@ let keys = {
     S: {pressed: false, released: false},
     D: {pressed: false, released: false},
     SHIFT: {pressed: false, released: false},
+    UP: {pressed: false, released: false},    // Add separate state for up arrow
+    SPACE: {pressed: false, released: false}, // Add separate state for spacebar
 };
 
 camera.position.z = 5;
@@ -219,14 +221,17 @@ function animate() {
         deltaTime = now - lastTime;
         lastTime = now;
 
-        if (keys.W.pressed) {
+        // Check any of the jump keys
+        if (keys.W.pressed || keys.UP.pressed || keys.SPACE.pressed) {
             if (canJump || player.fallingCount === 0) {
                 canJump = true;
                 player.jump(deltaTime);
             }
-        } else if (keys.W.released) {
+        } else if (keys.W.released || keys.UP.released || keys.SPACE.released) {
             canJump = false;
             keys.W.released = false;
+            keys.UP.released = false;
+            keys.SPACE.released = false;
         }
 
         if (keys.A.pressed) {
