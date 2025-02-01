@@ -3,36 +3,74 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | LD-47</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traderman - Resource Management Game</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <p>Try to get the highest score within 180 seconds. Iron gives 2 points and gold gives 1 point. Traders walk around and buy from your buildings you place wood into. When the wood capacity reaches zero it is destroyed. Gather the stored gold before that! Enjoy the spagetti!
-    <br/>
-    Controls:
-    <br/>
-    WASD and Arrows: Move player<br/>
-    E: chop trees, gather wood and mine iron. (You can only chop fully grown trees)<br/>
-    Shift+E: gather gold from building<br/>
-    HJKL or dragging by mouse: move the camera.<br/>
-    Q: Focus camera on player.<br/>
-    <br/>
-    A building costs 10 Timber. </p>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+    
+    <div class="container">
+      <div class="game-info">
+        <div class="game-header">
+          <h1 class="game-title">Traderman</h1>
+        </div>
+
+        <div class="game-description">
+          <a href="../" class="back-button">← Back</a>
+          <p style="margin-top: 0px;">Try to get the highest score within 180 seconds!</p>
+          <ul>
+            <li>Iron gives 2 points</li>
+            <li>Gold gives 1 point</li>
+            <li>Traders will walk around and buy from your buildings</li>
+            <li>Buildings need wood to function - when wood capacity reaches zero, the building is destroyed</li>
+            <li>Remember to gather stored gold before buildings are destroyed!</li>
+          </ul>
+          <p class="note">Enjoy the spagetti! 🍝</p>
+        </div>
+
+        <div class="controls-section">
+          <h2 class="controls-title">Controls</h2>
+          <div class="control-item">
+            <span class="key">WASD</span>
+            <span> or arrow-keys to move</span>
+          </div>
+          <div class="control-item">
+            <span class="key">E</span>
+            <span>Chop trees, gather wood and mine iron (only fully grown trees)</span>
+          </div>
+          <div class="control-item">
+            <span class="key">Shift</span> + <span class="key">E</span>
+            <span>Gather gold from building</span>
+          </div>
+          <div class="control-item">
+            <span class="key">HJKL</span> 
+            <span>or mouse-drag to move the camera</span>
+          </div>
+          <div class="control-item">
+            <span class="key">Q</span>
+            <span>Focus camera on player</span>
+          </div>
+          <div class="cost-info">Building cost: 10 Timber</div>
         </div>
       </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">LD-47</div>
+
+      <div id="unity-container" class="unity-desktop">
+        <canvas id="unity-canvas"></canvas>
+        <div id="unity-loading-bar">
+          <div id="unity-logo"></div>
+          <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
+          </div>
+        </div>
+        <div id="unity-footer">
+          <div id="unity-webgl-logo"></div>
+          <div id="unity-fullscreen-button"></div>
+          <div id="unity-build-title">Traderman</div>
+        </div>
       </div>
     </div>
+
     <script>
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/jhoffis.github.io.loader.js";
