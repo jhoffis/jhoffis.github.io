@@ -133,6 +133,7 @@ class Character {
         // Add death when falling below y = -5
         if (this.position.y < -5) {
             this.die();
+            deathCountCount--;
         }
     }
 
