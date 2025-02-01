@@ -1,0 +1,17 @@
+body{
+	background-color: #eeccdd;
+}
+
+.important-note {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.important-note pre {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+}

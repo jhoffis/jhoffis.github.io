@@ -6,10 +6,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
+        <a href="../">Go back</a>
 		<p>This is an old flash based game from 2016-17 of what is essentially a pre-alpha version of Racingmaybe. 
 			Ruffle does not really simulate flash very well so this game is filled with bugs that are not really there. Sorry about that!</p>
 		<div id="container"></div>
-		<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+		<script src="../ruffle/ruffle.js"></script>
 		<script type="text/javascript">
 			const url = "./A Long Cruise.swf";
 			window.RufflePlayer = window.RufflePlayer || {};
@@ -19,9 +20,7 @@
 			container.appendChild(player);
 			window.RufflePlayer.config = {
 				autoPlay: true,
-				base: "../ruffle/",
 				logLevel: "error",
-				publicPath: "../ruffle/",
 				showSwfDownload: true,
 				warnOnUnsupportedContent: true,
 			};
