@@ -6,9 +6,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
-        <a href="../">Go back</a>
-		<p>This is an old flash based game from 2016-17 of what is essentially a pre-alpha version of Racingmaybe. 
-			Ruffle does not really simulate flash very well so this game is filled with bugs that are not really there. Sorry about that!</p>
+		<header>
+			<a href="../">Go back</a>
+			<p>This is an old flash based game from 2016-17 of what is essentially a pre-alpha version of Racingmaybe. 
+				Ruffle does not really simulate flash very well so this game is filled with bugs that are not really there. Sorry about that!</p>
+		</header>
 		<div id="container"></div>
 		<script src="../ruffle/ruffle.js"></script>
 		<script type="text/javascript">
@@ -23,6 +25,9 @@
 				logLevel: "error",
 				showSwfDownload: true,
 				warnOnUnsupportedContent: true,
+				width: 1280,
+				height: 720,
+				scale: "showAll"
 			};
 			player.load(url);
 		</script>
