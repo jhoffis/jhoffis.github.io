@@ -82,11 +82,14 @@ class Character {
         this.spawn = new THREE.Vector2(_position.x, _position.y);
         this.sprite = _sprite;
         this.size = size;
-        this.sprite.scale.set(size.x, size.y);
+        this.baseScale = size.x;
+        this.sprite.scale.set(this.baseScale, size.y);
         this.position = _position;
         this.animation = animation;
 
-
+        // Add center offset for flipping
+        this.sprite.center.set(0.5, 0.5);
+        
         this.verticalMovement = {value: 0, max: 1.3, min: -0.15};
         this.fallingCount = 0;
         this.fallingMax = 20;
@@ -95,6 +98,13 @@ class Character {
         this.walkingCount = 0;
         this.walkingMax = 4;
         this.walkingAcceleration = 0.005;
+
+        this.facingRight = true;
+
+        // Set up material properties for flipping
+        this.sprite.material.map.repeat.x = 1;
+        this.sprite.material.map.offset.x = 0;
+        this.sprite.material.needsUpdate = true;
     }
 
     jump(dt) {
@@ -209,8 +219,16 @@ class Character {
 
         let finalWalkingSpeed = forwBackValue * (newWalkingSpeed * 3);
 
-        let newPosition = new THREE.Vector2(this.position.x + finalWalkingSpeed, this.position.y);
+        // Update facing direction based on movement
+        if (forwBackValue < 0) {
+            this.facingRight = false;
+            console.log("Facing left", this.sprite.scale.x); // Debug log
+        } else if (forwBackValue > 0) {
+            this.facingRight = true;
+            console.log("Facing right", this.sprite.scale.x); // Debug log
+        }
 
+        let newPosition = new THREE.Vector2(this.position.x + finalWalkingSpeed, this.position.y);
         if (!this.isWithinColliderX(colliders, newPosition, this.size)) {
             this.walkingSpeed = newWalkingSpeed;
             this.walkingCount = newWalkingCount;
@@ -368,11 +386,15 @@ class Character {
     updateSprite() {
         this.sprite.position.set(this.position.x, this.position.y, 0);
 
-        // if(this.walking < 0){
-        //     this.sprite.scale.x = -1;
-        // } else {
-        //     this.sprite.scale.x = 1;
-        // }
+        // Flip by changing texture repeat and offset
+        if (!this.facingRight) {
+            this.sprite.material.map.repeat.x = -1;
+            this.sprite.material.map.offset.x = 1;
+        } else {
+            this.sprite.material.map.repeat.x = 1;
+            this.sprite.material.map.offset.x = 0;
+        }
+        this.sprite.material.needsUpdate = true;
 
         if (this.verticalMovement.value < 0) {
             //Set fall animation
@@ -380,7 +402,7 @@ class Character {
                 //Set move animation and direction right
                 this.animation.setIndexAnim(4, 16);
             } else if (this.walkingSpeed < 0) {
-                //Set move animation and direction left TODO
+                //Set move animation and direction left
                 this.animation.setIndexAnim(4, 16);
             } else {
                 //Regular falling animation
@@ -393,7 +415,7 @@ class Character {
             //Set move animation and direction right
             this.animation.setIndexAnim(1, 16);
         } else if (this.walkingSpeed < 0) {
-            //Set move animation and direction left TODO
+            //Set move animation and direction left
             this.animation.setIndexAnim(1, 16);
         } else {
             //Idle animation
