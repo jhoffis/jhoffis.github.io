@@ -19,14 +19,14 @@
 			const container = document.getElementById("container");
 			const ruffle = window.RufflePlayer.newest();
 			const player = ruffle.createPlayer();
+			player.style.width = "1280px";
+			player.style.height = "720px";
 			container.appendChild(player);
 			window.RufflePlayer.config = {
 				autoPlay: true,
 				logLevel: "error",
 				showSwfDownload: true,
 				warnOnUnsupportedContent: true,
-				width: 1280,
-				height: 720,
 				scale: "showAll"
 			};
 			player.load(url);
