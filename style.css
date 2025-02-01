@@ -15,13 +15,11 @@ body {
 
 #info {
     background-color: #456990;
-    /* height: 100%; */
     width: 24rem;
     position: absolute;
     z-index: 1000;
     padding: 1rem;
     margin: 1rem;
-    
     border-style: solid;
     border-width: 8px;
     border-color: #E4FDE1;
@@ -83,4 +81,46 @@ a {
     z-index: 100;
     font-family: Optima, Cochin, Georgia, Times, 'Times New Roman', serif;
     white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    body {
+        background: #456990;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    #info {
+        width: 100%;
+        margin: 0;
+        padding: 1rem;
+        position: relative;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+
+    .img,
+    #floating-title {
+        display: none !important;
+    }
+
+    a {
+        padding: 1rem 0;
+        margin: 0.5rem 0;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        text-indent: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    a:active {
+        background: rgba(255, 255, 255, 0.2);
+    }
 }

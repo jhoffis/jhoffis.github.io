@@ -1,13 +1,13 @@
 const links = [
+	{ title: "XboxEngine Project", image: "xproj.webp", path: "xproj" },
 	{ title: "Racingmaybe", image: "rm.webp", path: "https://store.steampowered.com/app/1261300/Racingmaybe/" },
 	{ title: "Racingmaybe 2: Gives Off Speed", image: "rm2.webp", path: "https://github.com/jhoffis/cproj_rm2" },
-	{ title: "Racingmaybe 1.8.3_FINAL (Old Alpha)", image: "rmold.png", path: "http://www.mediafire.com/file/4uogtrek3a1wnw3/racingmaybe_final.zip/file" },
-	{ title: "Naked Platformer", image: "nakedplatformer.png", path: "nakedplatformer" },
-	{ title: "Traderman", image: "traderman.png", path: "traderman" },
-	{ title: "A Platformer Engine", image: "platformer.png", path: "https://jhoffislauda.itch.io/a-platformer-engine" },
 	{ title: "Very fast grid path finder", image: "fastpath.png", path: "https://github.com/jhoffis/pathfinding" },
+	{ title: "Naked Platformer", image: "nakedplatformer.png", path: "nakedplatformer" },
+	{ title: "A Platformer Engine", image: "platformer.png", path: "https://jhoffislauda.itch.io/a-platformer-engine" },
 	{ title: "Their Disagreement - Boardgame", image: "uenighet.webp", path: "deresuenighet" },
-	{ title: "XboxEngine Project", image: "xproj.webp", path: "xproj" },
+	{ title: "Traderman", image: "traderman.png", path: "traderman" },
+	{ title: "Racingmaybe 1.8.3_FINAL (Old Alpha)", image: "rmold.png", path: "http://www.mediafire.com/file/4uogtrek3a1wnw3/racingmaybe_final.zip/file" },
 ];
 let images = [];
 let listedLinks = [];
@@ -23,6 +23,8 @@ document.body.appendChild(floatingTitle);
 
 // Add near the top with other constants
 let infoRect = listLinksNode.getBoundingClientRect();
+let touchStartX = 0;
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Add window resize handler
 window.addEventListener('resize', () => {
@@ -71,33 +73,36 @@ const distanceFromLastPos = (x, y) => {
 	return Math.hypot(x - lastImg.x, y - lastImg.y);
 }
 
-window.onmousemove = e => {
-    // Calculate gradient position based on mouse coordinates
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
-    document.body.style.backgroundPosition = `${x}% ${y}%`;
+// Modify the window.onmousemove handler
+const handleMove = (x, y) => {
+    if (isMobile) return; // Skip all movement handling on mobile
+    
+    // Calculate gradient position based on coordinates
+    const gradX = (x / window.innerWidth) * 100;
+    const gradY = (y / window.innerHeight) * 100;
+    document.body.style.backgroundPosition = `${gradX}% ${gradY}%`;
 
     // Get current bounds of info div
     infoRect = listLinksNode.getBoundingClientRect();
-    const isOverInfo = e.clientX >= infoRect.left && 
-                      e.clientX <= infoRect.right && 
-                      e.clientY >= infoRect.top && 
-                      e.clientY <= infoRect.bottom;
+    const isOverInfo = x >= infoRect.left && 
+                      x <= infoRect.right && 
+                      y >= infoRect.top && 
+                      y <= infoRect.bottom;
     body.style.cursor = isOverInfo ? 'default' : 'none';
 
     // Always update the position of the current image
     if (lastImg.image !== undefined) {
-        lastImg.image.style.left = e.clientX + "px";
-        lastImg.image.style.top = e.clientY + "px";
-        setFloatingTitlePos(lastImg.image, e.clientX, e.clientY);
+        lastImg.image.style.left = x + "px";
+        lastImg.image.style.top = y + "px";
+        setFloatingTitlePos(lastImg.image, x, y);
     }
     
     // Skip the rest of the logic if we're over the info div
     if (isOverInfo) return;
     
     // Only process x-diff when not over info div
-    const deltaX = e.clientX - lastImg.x;
-    const threshold = window.innerWidth * 0.05;
+    const deltaX = x - lastImg.x;
+    const threshold = window.innerWidth * (isMobile ? 0.1 : 0.05);
     
     if (Math.abs(deltaX) > threshold) {
         const direction = deltaX > 0 ? 1 : -1;
@@ -111,7 +116,7 @@ window.onmousemove = e => {
         document.body.appendChild(newImage);
         images.push(newImage);
 
-        activate(newImage, e.clientX, e.clientY);
+        activate(newImage, x, y);
 
         // Remove old images if we exceed maxAmountImgs
         while (images.length > maxAmountImgs) {
@@ -121,15 +126,27 @@ window.onmousemove = e => {
     }
 }
 
-window.onmousedown = e => {
-	if (e.button !== 0)
-		return;
-	// go to the head's link
-	document.location.href = links[globalIndex].path;
+window.onmousemove = e => handleMove(e.clientX, e.clientY);
+
+// Modify the click/tap handler
+const handleClick = (e) => {
+    if (e.type === 'touchend') {
+        e.preventDefault();
+    }
+    if (e.type === 'mousedown' && e.button !== 0) return;
+    
+    // go to the head's link
+    if (links[globalIndex] !== undefined) {
+        document.location.href = links[globalIndex].path;
+    }
 }
+
+window.onmousedown = handleClick;
 
 // Add this new function to handle link hover
 function handleLinkHover(index) {
+    if (isMobile) return; // Skip hover handling on mobile
+    
     if (globalIndex === index) return; // Don't do anything if it's already the current image
     
     globalIndex = index;
@@ -156,8 +173,26 @@ for (let i = 0; i < links.length; i++) {
 	const link = document.createElement("a");
 	link.innerText = links[i].title;
 	link.href = links[i].path;
-	// Add hover event listeners
-	link.addEventListener('mouseenter', () => handleLinkHover(i));
+	
+	if (!isMobile) {
+		// Only add hover listeners on desktop
+		link.addEventListener('mouseenter', () => handleLinkHover(i));
+	}
+	
 	listLinksNode.appendChild(link);
 	listedLinks.push(link);
+}
+
+// Remove touch event listeners on mobile
+if (!isMobile) {
+	window.addEventListener('touchstart', (e) => {
+		touchStartX = e.touches[0].clientX;
+	}, { passive: true });
+
+	window.addEventListener('touchmove', (e) => {
+		e.preventDefault();
+		handleMove(e.touches[0].clientX, e.touches[0].clientY);
+	}, { passive: false });
+
+	window.addEventListener('touchend', handleClick);
 }
