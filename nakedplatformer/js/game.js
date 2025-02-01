@@ -124,7 +124,6 @@ let finished = false;
 
 let LVLImg = new MarvinImage();
 let LVL = 0;
-const maxLVL = 2;
 
 function loadLVL() {
     finished = false;
@@ -132,77 +131,72 @@ function loadLVL() {
 }
 
 function initLVL() {
-    if (LVL <= maxLVL) {
 
-        LVL++;
-        if (colliders != null) {
-            colliders.forEach((row) => {
-                row.forEach((collider) => {
-                    scene.remove(collider.sprite);
-                })
+    LVL++;
+    if (colliders != null) {
+        colliders.forEach((row) => {
+            row.forEach((collider) => {
+                scene.remove(collider.sprite);
             })
-        }
-        colliders = [...Array(LVLImg.getWidth())].map(e => Array(LVLImg.getHeight()))
-        let imgY;
-        for (let x = 0; x < LVLImg.getWidth(); x++) {
-            imgY = LVLImg.getHeight() - 1;
-            for (let y = 0; y < LVLImg.getHeight(); y++) {
-                let r = LVLImg.getIntComponent0(x, imgY);
-                let g = LVLImg.getIntComponent1(x, imgY);
-                let b = LVLImg.getIntComponent2(x, imgY);
+        })
+    }
+    colliders = [...Array(LVLImg.getWidth())].map(e => Array(LVLImg.getHeight()))
+    let imgY;
+    for (let x = 0; x < LVLImg.getWidth(); x++) {
+        imgY = LVLImg.getHeight() - 1;
+        for (let y = 0; y < LVLImg.getHeight(); y++) {
+            let r = LVLImg.getIntComponent0(x, imgY);
+            let g = LVLImg.getIntComponent1(x, imgY);
+            let b = LVLImg.getIntComponent2(x, imgY);
 
-                if (g === 0) {
+            if (g === 0) {
 
-                    let tile = createTile(r, g, b, x, y);
-                    if (tile !== null)
-                        createCollider(tile);
+                let tile = createTile(r, g, b, x, y);
+                if (tile !== null)
+                    createCollider(tile);
 
-                } else {
-                    //characters
-                    if (g === 200) {
-                        //Player
+            } else {
+                //characters
+                if (g === 200) {
+                    //Player
 
-                        let spriteMap2 = new THREE.TextureLoader().load("res/char/jump0.png");
-                        spriteMap2.magFilter = THREE.NearestFilter;
+                    let spriteMap2 = new THREE.TextureLoader().load("res/char/jump0.png");
+                    spriteMap2.magFilter = THREE.NearestFilter;
 
-                        let characterAnimation = new SpriteAnimator([{url: "res/char/idle", amount: "2", type: ".png"},
-                            {url: "res/char/walk", amount: "2", type: ".png"},
-                            {url: "res/char/jump", amount: "1", type: ".png"},
-                            {url: "res/char/fall", amount: "1", type: ".png"},
-                            {url: "res/char/fallwalk", amount: "1", type: ".png"},]);
+                    let characterAnimation = new SpriteAnimator([{url: "res/char/idle", amount: "2", type: ".png"},
+                        {url: "res/char/walk", amount: "2", type: ".png"},
+                        {url: "res/char/jump", amount: "1", type: ".png"},
+                        {url: "res/char/fall", amount: "1", type: ".png"},
+                        {url: "res/char/fallwalk", amount: "1", type: ".png"},]);
 
 
-                        let spriteMaterial = new THREE.SpriteMaterial({map: spriteMap2});
-                        characterAnimation.playAnimationOnMaterial(0, spriteMaterial, 2);
-                        let playerSprite = new THREE.Sprite(spriteMaterial);
+                    let spriteMaterial = new THREE.SpriteMaterial({map: spriteMap2});
+                    characterAnimation.playAnimationOnMaterial(0, spriteMaterial, 2);
+                    let playerSprite = new THREE.Sprite(spriteMaterial);
 
-                        if (player == null) {
-                            player = new Character(playerSprite, new THREE.Vector2(x, y), characterAnimation, new THREE.Vector2(0.5, 1));
-                            scene.add(player.sprite);
-                            characters.push(player)
-                        } else {
-                            player.position.set(x, y);
-                            player.spawn.set(x, y);
-                        }
+                    if (player == null) {
+                        player = new Character(playerSprite, new THREE.Vector2(x, y), characterAnimation, new THREE.Vector2(0.5, 1));
+                        scene.add(player.sprite);
+                        characters.push(player)
+                    } else {
+                        player.position.set(x, y);
+                        player.spawn.set(x, y);
                     }
                 }
-
-
-                imgY--;
             }
+
+
+            imgY--;
         }
-
-        if (music == null) {
-            music = new Sound("res/sounds/ldjam.mp3");
-
-        }
-
-        running = true;
-        animate();
-
-    } else {
-        //Finish off game
     }
+
+    if (music == null) {
+        music = new Sound("res/sounds/ldjam.mp3");
+
+    }
+
+    running = true;
+    animate();
 
 }
 
